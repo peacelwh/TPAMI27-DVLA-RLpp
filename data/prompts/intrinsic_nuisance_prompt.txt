@@ -1,0 +1,14 @@
+You are shown a few labeled example images of the category "{class_name}".
+
+Describe what is VISIBLE in these images in two separate roles. Use short affirmative noun phrases only. Do not use negations and do not mention other categories.
+
+1. "intrinsic": visible object properties that define the category itself (shape, parts, texture, colour pattern, material, pose cues that belong to the object).
+2. "nuisance": visible incidental context that is NOT the object: scene background, co-occurring objects, occluders, lighting, weather, viewpoint or acquisition artefacts. Leave the lists empty if nothing reliable is visible.
+
+For each role give up to 8 local phrases (2-5 words each) and one global sentence that summarises its own local phrases. Phrases must describe only what can be seen; do not guess.
+
+Answer with a single JSON object and nothing else:
+{
+  "intrinsic": {"local": ["...", "..."], "global": "..."},
+  "nuisance":  {"local": ["...", "..."], "global": "..."}
+}

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dvla-rlpp"
+version = "1.0.0"
+description = "DVLA-RL++: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [{name = "Wenhao Li"}]
+dependencies = ["torch>=1.13", "torchvision", "timm>=0.9", "einops", "numpy", "tqdm", "tensorboard", "Pillow", "pyyaml"]
+
+[project.optional-dependencies]
+generation = ["transformers>=4.49", "accelerate", "qwen-vl-utils"]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
