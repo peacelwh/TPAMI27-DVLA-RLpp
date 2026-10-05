@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DVLA-RL++: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning</title>
+  <meta name="description" content="Project page of DVLA-RL++, which couples complementary semantic purification with counterfactual reinforcement-learning gating for vision-language few-shot learning.">
+  <meta property="og:title" content="DVLA-RL++: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning">
+  <meta property="og:description" content="Complementary semantic purification and counterfactual reinforcement-learning gating for few-shot learning.">
+  <meta property="og:image" content="static/figures/framework.png">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://peacelwh.github.io/TPAMI27-DVLA-RLpp/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23326eb1'/%3E%3Ctext x='16' y='21' font-size='14' font-family='Georgia' font-weight='700' text-anchor='middle' fill='white'%3E++%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<a class="skip-link" href="#overview">Skip to content</a>
+<main>
+
+<!-- ============================================================ header -->
+<header class="paper-header shell" id="top">
+  <h1>
+    <span>DVLA-RL++:</span>
+    <span class="title-second">Dual-Level <span class="term-align">Vision-Language Alignment</span> with <span class="term-gate">Reinforcement Learning Gating</span> for Few-Shot Learning</span>
+  </h1>
+  <div class="paper-authors">
+    <div class="author-list">
+      <span class="author"><a href="https://peacelwh.github.io/" target="_blank" rel="noreferrer">Wenhao Li</a> <sup>1,2</sup></span>
+      <span class="author">Xianjing Meng <sup>3</sup></span>
+      <span class="author">Qiangchang Wang <sup>1</sup></span>
+      <span class="author">Zhongyi Han <sup>1</sup></span>
+      <span class="author">Yilong Yin <sup>1</sup></span>
+      <span class="author">Liqiang Nie <sup>4</sup></span>
+    </div>
+    <div class="affiliation-list">
+      <span><sup>1</sup> School of Software, Shandong University</span>
+      <span><sup>2</sup> Shenzhen Loop Area Institute</span>
+      <span><sup>3</sup> Shandong University of Finance and Economics</span>
+      <span><sup>4</sup> Harbin Institute of Technology (Shenzhen)</span>
+    </div>
+  </div>
+  <p class="venue-line">Journal extension of DVLA-RL (ICLR 2026) <span class="venue-badge">IEEE TPAMI · under review</span></p>
+  <div class="resource-buttons" aria-label="Project resources">
+    <a class="resource-button is-disabled" data-paper-button data-paper-href="static/paper.pdf" aria-disabled="true" title="The manuscript PDF will be linked after the review process" role="link">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l6 6v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V9h5.5L13 3.5zM8 13h8v1.5H8V13zm0 3h8v1.5H8V16zm0-6h3v1.5H8V10z"/></svg>
+      <span>Paper</span>
+    </a>
+    <a class="resource-button" href="https://github.com/peacelwh/TPAMI27-DVLA-RLpp" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.17c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+      <span>Code</span>
+    </a>
+    <a class="resource-button" href="https://openreview.net/forum?id=2ix1K6zPRf" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v2H4V4zm0 4h16v12H4V8zm2 2v8h12v-8H6zm2 1.5h8v1.5H8v-1.5zm0 3h5v1.5H8v-1.5z"/></svg>
+      <span>DVLA-RL (ICLR 2026)</span>
+    </a>
+  </div>
+</header>
+
+<!-- ============================================================ TL;DR -->
+<section class="overview shell" id="overview">
+  <h2 class="tldr-heading">TL;DR</h2>
+  <figure class="teaser">
+    <div class="figure-frame">
+      <a class="figure-link" href="static/figures/framework.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution framework figure">
+        <img src="static/figures/framework.png" alt="Overall framework of DVLA-RL++: semantic banks from labeled supports, intrinsic semantics guiding local and global alignment, competing bank responses selecting support evidence, and paired sampled and reference gate trajectories during policy training." width="2147" height="1093" loading="eager">
+      </a>
+      <figcaption class="teaser-caption">Richer descriptions do not guarantee better support evidence. DVLA-RL++ decides <em>which</em> support tokens enter a prototype and <em>how strongly</em> semantics influence each visual layer.</figcaption>
+    </div>
+  </figure>
+  <div class="overview-notes">
+    <div>
+      <h3 class="finding-label">Support-evidence contamination</h3>
+      <p>A support image may contain both a discriminative object part and a background pattern that agrees with its class description. Treating both as positive evidence reinforces contextual shortcuts instead of resolving visual ambiguity.</p>
+    </div>
+    <div>
+      <h3 class="finding-label">Complementary semantic purification</h3>
+      <p>Intrinsic and nuisance descriptions are generated from labeled supports only and compared in a shared embedding space. An ambiguity-dependent rejection margin and a sparse allocation rule select supported visual tokens, and the rejected mass is assigned to an intrinsic semantic anchor.</p>
+    </div>
+    <div>
+      <h3 class="finding-label">Counterfactual RL gating</h3>
+      <p>A stochastic fusion policy is trained against an independently executed reference trajectory on the same episode, with a reward that combines classification utility and nuisance exposure. At inference only the deterministic mean policy runs.</p>
+    </div>
+  </div>
+  <ol class="tldr-questions">
+    <li><p>Which support evidence should define a class prototype when both object parts and incidental context agree with the class description?</p></li>
+    <li><p>How much semantic information should enter each visual layer, and how can that decision be learned from a paired, low-variance training signal?</p></li>
+    <li><p>Does deciding both improve recognition and robustness? DVLA-RL++ is the most accurate method in all 18 standard, fine-grained and cross-domain settings, gains 1.4 points on average over DVLA-RL, and shrinks the clean-to-shift accuracy drop from 5.9 to 2.2 points on miniImageNet.</p></li>
+  </ol>
+</section>
+
+<!-- ============================================================ nav -->
+<nav class="section-nav" aria-label="Page sections">
+  <div class="nav-inner">
+    <a href="#motivation">Motivation</a>
+    <a href="#framework">Framework</a>
+    <a href="#purification">Purification</a>
+    <a href="#gating">Gating</a>
+    <a href="#results">Results</a>
+    <a href="#analysis">Analysis</a>
+    <a href="#citation">Citation</a>
+  </div>
+</nav>
+
+<!-- ============================================================ 01 motivation -->
+<section id="motivation" class="chapter">
+  <div class="shell">
+    <div class="section-heading">
+      <span class="section-index" aria-hidden="true">01</span>
+      <h2>Why does a richer description not guarantee better <span class="term-align">evidence</span>?</h2>
+    </div>
+    <p class="section-lead">Few-shot learning builds class representations from a handful of labeled supports and compares separate queries with these summaries, so the quality of the evidence entering a prototype directly affects recognition. Our conference framework DVLA-RL combines local attributes and global descriptions with reinforcement-learning gates for hierarchical alignment. Nevertheless, a richer description and a more flexible fusion rule do not guarantee that the visual evidence emphasized by the model belongs to the class rather than to its context.</p>
+    <figure class="fig-narrow">
+      <div class="figure-frame">
+        <a class="figure-link" href="static/figures/motivation.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution motivation figure">
+          <img src="static/figures/motivation.png" alt="Motivation: intrinsic appearance and incidental context share visual cues, and comparing intrinsic with nuisance agreement separates feathers from reeds while a rejection margin excludes the ambiguous reed plume." width="780" height="936" loading="lazy">
+        </a>
+      </div>
+      <figcaption class="figure-caption">(a) Intrinsic appearance and incidental context share visual cues, so both agree with support features. (b) Comparing intrinsic and nuisance agreement separates discriminative feathers from contextual reeds, and a rejection margin of 0.15 excludes the ambiguous reed plume despite its positive relative evidence.</figcaption>
+    </figure>
+    <p class="section-lead">A bird among reeds illustrates the difficulty. Striped plumage shares visual patterns with vertical reeds and a reed plume. Both descriptions are factually correct and agree with support features, yet contextual cues become unreliable when the background changes. The reed plume exposes a subtler failure: its intrinsic agreement is high, but its advantage over the nuisance agreement is small, so a positive relative score alone would retain this ambiguous token while the rejection margin excludes it.</p>
+    <div class="finding">
+      <p>Positive image-text agreement does not determine which evidence should define a class. Semantic assistance therefore requires both comparison against a competing explanation and rejection of ambiguous evidence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 02 framework -->
+<section id="framework" class="chapter chapter-tinted">
+  <div class="shell">
+    <div class="section-heading">
+      <span class="section-index" aria-hidden="true">02</span>
+      <h2>DVLA-RL++ keeps dual-level alignment and adds two <span class="term-gate">decisions</span></h2>
+    </div>
+    <p class="section-lead">An episode contains labeled supports and separate queries from disjoint categories. Class names are available as semantic supervision, whereas query labels are used only for training objectives and evaluation metrics. The method retains the dual-level semantic alignment and scalar attention gate of DVLA-RL, but replaces unconditional support averaging with selective aggregation and learns how much semantic information to inject with a policy whose decisions depend on supports and preceding actions. The additional adaptation is fully specified before a test query is processed and needs no query labels.</p>
+    <div class="steps">
+      <div><span class="step-key">A</span><h3>Semantic banks</h3><p>Labeled supports generate intrinsic and nuisance phrases at local and global granularity. Generation is cached once per episode and never sees a query.</p></div>
+      <div><span class="step-key">B</span><h3>Gated alignment</h3><p>Intrinsic semantics guide local and global visual alignment through RL-gated attention blocks at two selected layers.</p></div>
+      <div><span class="step-key">C</span><h3>Purified prototypes</h3><p>Competing bank responses select support evidence, which is mixed with an intrinsic anchor and aggregated into class prototypes.</p></div>
+      <div><span class="step-key">D</span><h3>Counterfactual policy</h3><p>Sampled and frozen-reference gates follow separate trajectories, and their paired utilities update the gate policy alone.</p></div>
+    </div>
+    <figure class="fig-narrow">
+      <div class="figure-frame">
+        <a class="figure-link" href="static/figures/gated_attention.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution gated attention figure">
+          <img src="static/figures/gated_attention.png" alt="RL-gated attention block: shared intrinsic semantic queries produce image-guided and text-guided contexts mixed by a support-conditioned scalar gate." width="967" height="872" loading="lazy">
+        </a>
+      </div>
+      <figcaption class="figure-caption">RL-gated attention block. Shared intrinsic semantic queries produce image-guided and text-guided contexts, which a support-conditioned scalar gate mixes. The pooled context is broadcast to image tokens, the fused semantic tokens are appended for transformer processing, and only the updated image tokens are retained.</figcaption>
+    </figure>
+    <div class="method-note">
+      <h3>One scalar action per layer</h3>
+      <p>Let \(Z_\ell\) denote image tokens and \(T_\ell\) the projected intrinsic semantic tokens concatenated across all candidate classes. The image-guided and text-guided contexts are mixed by the gate action \(a_\ell\in[0,1]\),</p>
+      <p>\[ V_\ell=\operatorname{Attn}(T_\ell W_q, Z_\ell W_k^v, Z_\ell W_v^v),\qquad S_\ell=\operatorname{Attn}(T_\ell W_q, T_\ell W_k^t, T_\ell W_v^t),\qquad B_\ell(a_\ell)=a_\ell V_\ell+(1-a_\ell)S_\ell, \]</p>
+      <p>and the pooled context is broadcast to the image tokens before the next block, \(Z_{\ell+1}=\big[F_{\phi,\ell}([Z_\ell+\mathbf{1}\,\mathrm{mean}(B_\ell);\,B_\ell])\big]_{\mathrm{img}}\). The same semantic tokens subsequently process every query, so no query class is needed to choose a description, and the support-derived schedule keeps query representations compatible with the prototypes. Classification uses cosine logits between a normalized query feature and the class prototypes with temperature \(\tau_c\).</p>
+    </div>
+    <div class="finding">
+      <p>Scoring projections are calibrated on labeled base supports before policy training and then frozen, so the policy cannot lower its nuisance cost by rotating the scoring geometry.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 03 purification -->
+<section id="purification" class="chapter">
+  <div class="shell">
+    <div class="section-heading">
+      <span class="section-index" aria-hidden="true">03</span>
+      <h2>Complementary <span class="term-pur">semantic purification</span></h2>
+    </div>
+    <p class="section-lead">We distinguish semantic levels from evidence roles. Local attributes and global descriptions specify the granularity of alignment, whereas intrinsic and nuisance banks specify whether a description explains the class or its incidental context. "Striped plumage" and "vertical reeds" describe different evidence within the same image, and a nuisance phrase is neither a negated sentence nor a competing class label. Nuisance phrases are used only for scoring and policy state construction.</p>
+    <figure class="fig-medium">
+      <div class="figure-frame">
+        <a class="figure-link" href="static/figures/semantic_purification.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution purification figure">
+          <img src="static/figures/semantic_purification.png" alt="Complementary semantic purification: projected support tokens compete against intrinsic and nuisance banks, signed evidence and an overlap-dependent margin determine sparse weights, and retained evidence is mixed with an intrinsic anchor." width="937" height="568" loading="lazy">
+        </a>
+      </div>
+      <figcaption class="figure-caption">Projected support tokens compete against intrinsic and nuisance banks. Signed evidence and an overlap-dependent margin determine sparse weights on the original visual features. Each support representation combines retained visual evidence with an intrinsic anchor carrying the remaining mass, and class-wise averaging followed by normalization yields the prototype.</figcaption>
+    </figure>
+    <div class="method-note">
+      <h3>Compare, reject, allocate, anchor</h3>
+      <p>Bank responses use size-normalized log-sum-exp aggregation so that bank size alone cannot increase evidence, and the signed evidence of a token is the difference between its intrinsic and nuisance responses, \(d_{c,k,i}=u^{+}_{c,k,i}-u^{-}_{c,k,i}\). The rejection margin grows with the ambiguity between the two explanations,</p>
+      <p>\[ o_c=\tfrac{1}{2}\big(1+\max_{r,t}(e^{+}_{c,r})^{\top}e^{-}_{c,t}\big),\qquad \xi_c=\xi_0+\kappa_o\,o_c, \]</p>
+      <p>and the allocator projects the margin-corrected evidence onto the capped simplex,</p>
+      <p>\[ \mathbf{a}_{c,k}=\underset{a\ge 0,\;\mathbf{1}^{\top}a\le 1}{\arg\min}\;\tfrac{1}{2}\Big\|a-\frac{\mathbf{d}_{c,k}-\xi_c\mathbf{1}}{\tau_s}\Big\|_2^2,\qquad \rho_{c,k}=\mathbf{1}^{\top}\mathbf{a}_{c,k}. \]</p>
+      <p>Its threshold solution implies that retained tokens necessarily clear the rejection margin, and unused mass is neutral rather than redistributed among rejected tokens. With a mixing coefficient \(\lambda\) and the normalized intrinsic anchor \(r_c\), the raw support representation is \(w_{c,k}=\lambda\sum_i a_{c,k,i}z_{c,k,i}+(1-\lambda\rho_{c,k})\,r_c\), so a support with no retained token contributes exactly its anchor. The averaged representation is normalized into the prototype \(p_c\).</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-value">0.74 <small>&rarr; 0.16</small></div><div class="stat-label">Histogram overlap between intrinsic and nuisance signed margins on miniImageNet (DVLA-RL &rarr; DVLA-RL++)</div></div>
+      <div class="stat"><div class="stat-value">0.75 <small>&rarr; 0.12</small></div><div class="stat-label">Histogram overlap on CUB</div></div>
+      <div class="stat"><div class="stat-value">24%</div><div class="stat-label">Token retention at the default setting</div></div>
+      <div class="stat"><div class="stat-value">94%</div><div class="stat-label">Intrinsic precision among retained tokens</div></div>
+      <div class="stat"><div class="stat-value">0.08</div><div class="stat-label">Neutral mass assigned to the intrinsic anchor</div></div>
+    </div>
+    <figure class="fig-narrow">
+      <div class="figure-frame">
+        <a class="figure-link" href="static/figures/evidence_margins.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution evidence figure">
+          <img src="static/figures/evidence_margins.png" alt="Signed-margin distributions of intrinsic and nuisance evidence on miniImageNet and CUB for DVLA-RL and DVLA-RL++." width="969" height="824" loading="lazy">
+        </a>
+      </div>
+      <figcaption class="figure-caption">Signed-margin distributions of intrinsic and nuisance evidence on miniImageNet and CUB for DVLA-RL (top) and DVLA-RL++ (bottom). OVL denotes histogram overlap, and the dotted line marks zero. Nuisance evidence is pushed below the margin while intrinsic evidence remains above it.</figcaption>
+    </figure>
+    <div class="finding">
+      <p>Prototype stability. If nuisance scores have mean at most \(-\Delta\) with conditionally sub-Gaussian error of scale \(\sigma\), the expected retained nuisance mass decays as \(\exp[-(\Delta+\xi_c)^2/2\sigma^2]\), and the normalized prototype error is at most twice the raw bound. No independence among tokens is required.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 04 gating -->
+<section id="gating" class="chapter chapter-tinted">
+  <div class="shell">
+    <div class="section-heading">
+      <span class="section-index" aria-hidden="true">04</span>
+      <h2>Counterfactual <span class="term-gate">reinforcement-learning gating</span></h2>
+    </div>
+    <p class="section-lead">Training alternates representation learning and policy learning. A policy batch is collected with the representation, scorer, text encoder and reference policy frozen. The sampled policy and the frozen DVLA-RL reference follow separate trajectories from the same initial inputs, and their final prototypes and query predictions define a paired reward. A policy update changes only gate parameters, a separate classification step updates the representation under stopped actions, and stale trajectories are discarded whenever the representation changes.</p>
+    <figure class="fig-narrow">
+      <div class="figure-frame">
+        <a class="figure-link" href="static/figures/counterfactual_gating.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution gating figure">
+          <img src="static/figures/counterfactual_gating.png" alt="Counterfactual reinforcement-learning gating: sampled actions and frozen-reference mean actions generate separate state trajectories, and the utility gap with a state baseline defines the advantage for policy-only CF-PPO updates." width="949" height="860" loading="lazy">
+        </a>
+      </div>
+      <figcaption class="figure-caption">Sampled actions and frozen-reference mean actions generate separate state trajectories under shared inputs. Utilities combine recognition and nuisance costs, with a deviation penalty for the sampled branch. The utility gap and a state baseline define the advantage for policy-only CF-PPO updates, during which the encoders remain fixed.</figcaption>
+    </figure>
+    <div class="method-note">
+      <h3>Paired returns on the same episode</h3>
+      <p>The policy observes pooled support features, the bank summaries, rejection statistics and the layer index, and keeps the scalar action space of the original gate through a mean-bounded Beta distribution, \(a_\ell\sim\mathrm{Beta}\big(\kappa_g p_\theta(\mathcal{H}_\ell),\,\kappa_g[1-p_\theta(\mathcal{H}_\ell)]\big)\). The reference executes its own mean actions \(a^0_\ell\) and never receives states produced by sampled actions. Nuisance exposure is measured on post-action support tokens, \(C(\mathbf{a})=\frac{1}{LNK}\sum_{\ell,c,k}\frac{1}{M_\ell}\sum_i[\xi_c-d^{\mathrm{post}}_{\ell,c,k,i}(\mathbf{a})]_+\), and the paired reward and advantage are</p>
+      <p>\[ R(\mathbf{a})=-\mathcal{L}_{\mathrm{cls}}(\mathbf{a})-\gamma\,C(\mathbf{a})-\frac{\eta}{L}\sum_\ell (a_\ell-a^0_\ell)^2,\qquad R_0=-\mathcal{L}_{\mathrm{cls}}(\mathbf{a}^0)-\gamma\,C(\mathbf{a}^0),\qquad A_\ell=\operatorname{sg}\big[R(\mathbf{a})-R_0-b_\omega(\mathcal{H}_\ell)\big]. \]</p>
+      <p>With action-independent reference randomness, differentiable positive policy densities and fixed environment parameters, the score-function estimator \(\sum_\ell A_\ell\nabla_\theta\log\pi_\theta(a_\ell\mid\mathcal{H}_\ell)\) is unbiased for the gradient of the expected reward (Proposition 1). Repeated minibatch updates use the clipped surrogate \(\mathcal{L}_{\mathrm{CF\text{-}PPO}}=-\mathbb{E}\sum_\ell\min(r_\ell A_\ell,\,\mathrm{clip}(r_\ell,1-\epsilon_p,1+\epsilon_p)A_\ell)\), and the deviation of its gradient from the importance-weighted gradient is bounded in terms of the active clipped samples.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-value">0.60 <small>vs 1.25</small></div><div class="stat-label">Gradient-covariance trace of paired returns with a state baseline versus raw returns, relative to the state-baseline estimator (40% reduction)</div></div>
+      <div class="stat"><div class="stat-value">24% <small>&rarr; 9%</small></div><div class="stat-label">Frequency of sampled trajectories with higher nuisance cost than the reference</div></div>
+      <div class="stat"><div class="stat-value">22% <small>&rarr; 15%</small></div><div class="stat-label">Active PPO clipping after policy updates</div></div>
+      <div class="stat"><div class="stat-value">1 <small>forward pass</small></div><div class="stat-label">Per query at inference: banks, prototypes and the mean gate schedule are cached per episode, with no reference rollout or value evaluation</div></div>
+    </div>
+    <figure class="fig-narrow">
+      <div class="figure-frame">
+        <a class="figure-link" href="static/figures/policy_diagnostics.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution policy diagnostics figure">
+          <img src="static/figures/policy_diagnostics.png" alt="Policy diagnostics on miniImageNet: gradient-covariance trace relative to the state-baseline estimator, and nuisance-cost increase and active clipping frequencies." width="973" height="500" loading="lazy">
+        </a>
+      </div>
+      <figcaption class="figure-caption">Policy diagnostics on miniImageNet. (a) Gradient-covariance trace relative to the state-baseline estimator, where Paired denotes paired returns with a state baseline. (b) Nuisance-cost increase and active clipping frequencies.</figcaption>
+    </figure>
+    <div class="finding">
+      <p>Detaching a tensor is an implementation operation, whereas conditional action independence is a statistical condition. The separate reference rollout provides the latter, which stopping gradients through an action-dependent reference would not.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 05 results -->
+<section id="results" class="chapter">
+  <div class="shell">
+    <div class="section-heading">
+      <span class="section-index" aria-hidden="true">05</span>
+      <h2>State-of-the-art accuracy on standard, fine-grained and cross-domain <span class="term-align">benchmarks</span></h2>
+    </div>
+    <p class="section-lead">The visual backbone is Visformer-Tiny with 224&times;224 inputs, the frozen text encoder is the CLIP ViT-B/16 text encoder, and Qwen2.5-VL-32B generates attribute-level and description-level text from labeled supports. For each setting, 2,000 5-way tasks are sampled from novel classes with 15 queries per class, and we report mean accuracy with its 95% confidence interval. Competitor results are quoted from their original reports.</p>
+    <div data-tabs>
+      <div class="tabs" role="tablist" aria-label="Result tables">
+        <button class="tab" role="tab" data-tab="general" aria-selected="true">General FSL</button>
+        <button class="tab" role="tab" data-tab="fine" aria-selected="false">Fine-grained FSL</button>
+        <button class="tab" role="tab" data-tab="cross" aria-selected="false">Cross-domain FSL</button>
+      </div>
+
+      <div class="tab-panel" data-panel="general" role="tabpanel">
+        <div class="table-scroll">
+          <table class="results">
+            <thead>
+              <tr><th rowspan="2">Method</th><th rowspan="2">Venue</th><th colspan="2" class="group">miniImageNet</th><th colspan="2" class="group">tieredImageNet</th><th colspan="2" class="group">CIFAR-FS</th></tr>
+              <tr><th>1-shot</th><th>5-shot</th><th>1-shot</th><th>5-shot</th><th>1-shot</th><th>5-shot</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ProtoNet</td><td>NeurIPS 2017</td><td>62.39 <small>&plusmn;0.21</small></td><td>80.53 <small>&plusmn;0.14</small></td><td>68.23 <small>&plusmn;0.23</small></td><td>84.03 <small>&plusmn;0.16</small></td><td>72.20 <small>&plusmn;0.70</small></td><td>83.50 <small>&plusmn;0.50</small></td></tr>
+              <tr><td>AM3</td><td>NeurIPS 2019</td><td>65.30 <small>&plusmn;0.49</small></td><td>78.10 <small>&plusmn;0.36</small></td><td>69.08 <small>&plusmn;0.47</small></td><td>82.58 <small>&plusmn;0.31</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>DeepEMD</td><td>CVPR 2020</td><td>65.91 <small>&plusmn;0.82</small></td><td>82.41 <small>&plusmn;0.56</small></td><td>71.16 <small>&plusmn;0.87</small></td><td>86.03 <small>&plusmn;0.58</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>SUN</td><td>ECCV 2022</td><td>67.80 <small>&plusmn;0.45</small></td><td>83.25 <small>&plusmn;0.30</small></td><td>72.99 <small>&plusmn;0.50</small></td><td>86.74 <small>&plusmn;0.33</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>FewTURE</td><td>NeurIPS 2022</td><td>68.02 <small>&plusmn;0.88</small></td><td>84.51 <small>&plusmn;0.53</small></td><td>72.96 <small>&plusmn;0.92</small></td><td>86.43 <small>&plusmn;0.67</small></td><td>72.80 <small>&plusmn;0.88</small></td><td>86.14 <small>&plusmn;0.64</small></td></tr>
+              <tr><td>SVAE</td><td>CVPR 2022</td><td>74.84 <small>&plusmn;0.23</small></td><td>83.28 <small>&plusmn;0.40</small></td><td>76.98 <small>&plusmn;0.65</small></td><td>85.77 <small>&plusmn;0.50</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>Meta-AdaM</td><td>NeurIPS 2023</td><td>59.89 <small>&plusmn;0.49</small></td><td>77.92 <small>&plusmn;0.43</small></td><td>65.31 <small>&plusmn;0.48</small></td><td>85.24 <small>&plusmn;0.35</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>ProtoDiff</td><td>NeurIPS 2023</td><td>66.63 <small>&plusmn;0.21</small></td><td>83.48 <small>&plusmn;0.15</small></td><td>72.95 <small>&plusmn;0.24</small></td><td>85.15 <small>&plusmn;0.18</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>CPEA</td><td>ICCV 2023</td><td>71.97 <small>&plusmn;0.65</small></td><td>87.06 <small>&plusmn;0.38</small></td><td>76.93 <small>&plusmn;0.70</small></td><td>90.12 <small>&plusmn;0.45</small></td><td>77.82 <small>&plusmn;0.66</small></td><td>88.98 <small>&plusmn;0.45</small></td></tr>
+              <tr><td>SP</td><td>CVPR 2023</td><td>72.31 <small>&plusmn;0.40</small></td><td>83.42 <small>&plusmn;0.30</small></td><td>78.03 <small>&plusmn;0.46</small></td><td>88.55 <small>&plusmn;0.32</small></td><td>82.18 <small>&plusmn;0.40</small></td><td>88.24 <small>&plusmn;0.32</small></td></tr>
+              <tr><td>ALFA</td><td>TPAMI 2024</td><td>66.61 <small>&plusmn;0.28</small></td><td>81.43 <small>&plusmn;0.25</small></td><td>70.29 <small>&plusmn;0.40</small></td><td>86.17 <small>&plusmn;0.35</small></td><td>76.32 <small>&plusmn;0.43</small></td><td>86.73 <small>&plusmn;0.31</small></td></tr>
+              <tr><td>LastShot</td><td>TPAMI 2024</td><td>67.35 <small>&plusmn;0.20</small></td><td>82.58 <small>&plusmn;0.14</small></td><td>72.43 <small>&plusmn;0.23</small></td><td>85.82 <small>&plusmn;0.16</small></td><td>76.76 <small>&plusmn;0.21</small></td><td>87.49 <small>&plusmn;0.12</small></td></tr>
+              <tr><td>MetaKernel</td><td>TPAMI 2024</td><td>66.9 <small>&plusmn;0.3</small></td><td>81.3 <small>&plusmn;0.2</small></td><td class="na">-</td><td class="na">-</td><td>76.1 <small>&plusmn;0.4</small></td><td>86.9 <small>&plusmn;0.5</small></td></tr>
+              <tr><td>SIFT</td><td>IJCV 2024</td><td>77.31 <small>&plusmn;0.67</small></td><td>86.95 <small>&plusmn;0.53</small></td><td>77.86 <small>&plusmn;0.77</small></td><td>89.89 <small>&plusmn;0.52</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>SemFew</td><td>CVPR 2024</td><td>78.94 <small>&plusmn;0.66</small></td><td>86.49 <small>&plusmn;0.50</small></td><td>82.37 <small>&plusmn;0.77</small></td><td>89.89 <small>&plusmn;0.52</small></td><td>84.34 <small>&plusmn;0.67</small></td><td>89.11 <small>&plusmn;0.54</small></td></tr>
+              <tr><td>ECER</td><td>AAAI 2025</td><td>81.14 <small>&plusmn;0.15</small></td><td class="na">-</td><td>81.81 <small>&plusmn;0.51</small></td><td class="na">-</td><td>86.01 <small>&plusmn;0.35</small></td><td class="na">-</td></tr>
+              <tr><td>CPL</td><td>TPAMI 2025</td><td>72.82 <small>&plusmn;0.61</small></td><td>87.93 <small>&plusmn;0.37</small></td><td>78.05 <small>&plusmn;0.70</small></td><td>90.89 <small>&plusmn;0.44</small></td><td>78.82 <small>&plusmn;0.65</small></td><td>89.98 <small>&plusmn;0.44</small></td></tr>
+              <tr><td>FRN+IAM</td><td>TPAMI 2025</td><td>66.96 <small>&plusmn;0.19</small></td><td>83.19 <small>&plusmn;0.13</small></td><td>71.85 <small>&plusmn;0.22</small></td><td>86.55 <small>&plusmn;0.15</small></td><td class="na">-</td><td class="na">-</td></tr>
+              <tr class="base"><td>DVLA-RL</td><td>ICLR 2026</td><td>81.69 <small>&plusmn;0.36</small></td><td>88.25 <small>&plusmn;0.28</small></td><td>83.02 <small>&plusmn;0.43</small></td><td>91.71 <small>&plusmn;0.29</small></td><td>87.18 <small>&plusmn;0.40</small></td><td>90.59 <small>&plusmn;0.31</small></td></tr>
+              <tr class="ours"><td>DVLA-RL++</td><td>Ours</td><td>83.41 <small>&plusmn;0.34</small></td><td>89.63 <small>&plusmn;0.26</small></td><td>84.57 <small>&plusmn;0.41</small></td><td>92.89 <small>&plusmn;0.27</small></td><td>88.70 <small>&plusmn;0.38</small></td><td>91.75 <small>&plusmn;0.29</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">5-way accuracy (%) with 95% confidence intervals on miniImageNet, tieredImageNet and CIFAR-FS.</p>
+      </div>
+
+      <div class="tab-panel" data-panel="fine" role="tabpanel" hidden>
+        <div class="table-scroll">
+          <table class="results">
+            <thead>
+              <tr><th rowspan="2">Method</th><th rowspan="2">Venue</th><th colspan="2" class="group">CUB</th><th colspan="2" class="group">Stanford Cars</th><th colspan="2" class="group">Stanford Dogs</th></tr>
+              <tr><th>1-shot</th><th>5-shot</th><th>1-shot</th><th>5-shot</th><th>1-shot</th><th>5-shot</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ProtoNet</td><td>NeurIPS 2017</td><td>63.44 <small>&plusmn;0.56</small></td><td>83.17 <small>&plusmn;0.35</small></td><td>45.01 <small>&plusmn;0.49</small></td><td>87.19 <small>&plusmn;0.31</small></td><td>41.61 <small>&plusmn;0.50</small></td><td>76.78 <small>&plusmn;0.36</small></td></tr>
+              <tr><td>FRN</td><td>CVPR 2021</td><td>83.55 <small>&plusmn;0.19</small></td><td>92.92 <small>&plusmn;0.10</small></td><td>58.90 <small>&plusmn;0.22</small></td><td>79.65 <small>&plusmn;0.15</small></td><td>49.37 <small>&plusmn;0.20</small></td><td>67.13 <small>&plusmn;0.17</small></td></tr>
+              <tr><td>DAN</td><td>AAAI 2022</td><td>72.89 <small>&plusmn;0.50</small></td><td>86.60 <small>&plusmn;0.31</small></td><td>70.21 <small>&plusmn;0.50</small></td><td>85.55 <small>&plusmn;0.31</small></td><td>59.81 <small>&plusmn;0.50</small></td><td>77.19 <small>&plusmn;0.35</small></td></tr>
+              <tr><td>MFGN</td><td>IJCAI 2022</td><td>84.01 <small>&plusmn;0.39</small></td><td>84.01 <small>&plusmn;0.39</small></td><td class="na">-</td><td class="na">-</td><td>74.81 <small>&plusmn;0.44</small></td><td>86.52 <small>&plusmn;0.26</small></td></tr>
+              <tr><td>TDM</td><td>CVPR 2022</td><td>84.36 <small>&plusmn;0.19</small></td><td>93.37 <small>&plusmn;0.10</small></td><td>68.36 <small>&plusmn;0.22</small></td><td>86.14 <small>&plusmn;0.13</small></td><td>57.64 <small>&plusmn;0.22</small></td><td>75.03 <small>&plusmn;0.16</small></td></tr>
+              <tr><td>BSFA</td><td>TCSVT 2023</td><td>86.00 <small>&plusmn;0.41</small></td><td>92.53 <small>&plusmn;0.23</small></td><td>88.93 <small>&plusmn;0.38</small></td><td>95.20 <small>&plusmn;0.20</small></td><td>69.58 <small>&plusmn;0.50</small></td><td>82.59 <small>&plusmn;0.33</small></td></tr>
+              <tr><td>MLI</td><td>TIP 2024</td><td>85.94 <small>&plusmn;0.42</small></td><td>93.50 <small>&plusmn;0.29</small></td><td class="na">-</td><td class="na">-</td><td>76.32 <small>&plusmn;0.47</small></td><td>88.25 <small>&plusmn;0.27</small></td></tr>
+              <tr><td>C2-Net</td><td>AAAI 2024</td><td>83.31 <small>&plusmn;0.41</small></td><td>92.18 <small>&plusmn;0.23</small></td><td>88.96 <small>&plusmn;0.37</small></td><td>95.16 <small>&plusmn;0.20</small></td><td>75.50 <small>&plusmn;0.49</small></td><td>87.65 <small>&plusmn;0.28</small></td></tr>
+              <tr><td>SUITED</td><td>AAAI 2025</td><td>86.02 <small>&plusmn;0.47</small></td><td>94.13 <small>&plusmn;0.24</small></td><td>89.97 <small>&plusmn;0.36</small></td><td>96.53 <small>&plusmn;0.16</small></td><td>76.55 <small>&plusmn;0.47</small></td><td>88.86 <small>&plusmn;0.27</small></td></tr>
+              <tr><td>FRN+TDM+IAM</td><td>TPAMI 2025</td><td>84.84 <small>&plusmn;0.18</small></td><td>93.60 <small>&plusmn;0.10</small></td><td class="na">-</td><td class="na">-</td><td class="na">-</td><td class="na">-</td></tr>
+              <tr class="base"><td>DVLA-RL</td><td>ICLR 2026</td><td>91.93 <small>&plusmn;0.28</small></td><td>95.06 <small>&plusmn;0.19</small></td><td>92.95 <small>&plusmn;0.24</small></td><td>96.59 <small>&plusmn;0.15</small></td><td>89.64 <small>&plusmn;0.30</small></td><td>91.42 <small>&plusmn;0.25</small></td></tr>
+              <tr class="ours"><td>DVLA-RL++</td><td>Ours</td><td>94.31 <small>&plusmn;0.26</small></td><td>96.28 <small>&plusmn;0.17</small></td><td>95.13 <small>&plusmn;0.22</small></td><td>97.14 <small>&plusmn;0.14</small></td><td>92.05 <small>&plusmn;0.28</small></td><td>92.67 <small>&plusmn;0.23</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">5-way accuracy (%) with 95% confidence intervals on CUB-200-2011, Stanford Cars and Stanford Dogs.</p>
+      </div>
+
+      <div class="tab-panel" data-panel="cross" role="tabpanel" hidden>
+        <div class="table-scroll">
+          <table class="results">
+            <thead>
+              <tr><th rowspan="2">Method</th><th rowspan="2">Venue</th><th colspan="2" class="group">CUB</th><th colspan="2" class="group">Places</th><th colspan="2" class="group">ChestX</th></tr>
+              <tr><th>1-shot</th><th>5-shot</th><th>1-shot</th><th>5-shot</th><th>1-shot</th><th>5-shot</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>GNN</td><td>ICLR 2018</td><td>44.40 <small>&plusmn;0.68</small></td><td>62.87 <small>&plusmn;0.65</small></td><td>52.42 <small>&plusmn;0.80</small></td><td>70.91 <small>&plusmn;0.65</small></td><td>22.00 <small>&plusmn;0.46</small></td><td>25.27 <small>&plusmn;0.59</small></td></tr>
+              <tr><td>FWT</td><td>ICLR 2020</td><td>45.50 <small>&plusmn;0.46</small></td><td>64.97 <small>&plusmn;0.68</small></td><td>53.44 <small>&plusmn;0.79</small></td><td>70.70 <small>&plusmn;0.67</small></td><td>22.04 <small>&plusmn;0.44</small></td><td>25.18 <small>&plusmn;0.45</small></td></tr>
+              <tr><td>AFA</td><td>ECCV 2022</td><td>46.86 <small>&plusmn;0.70</small></td><td>68.25 <small>&plusmn;0.65</small></td><td>54.04 <small>&plusmn;0.75</small></td><td>76.21 <small>&plusmn;0.60</small></td><td>22.92 <small>&plusmn;0.20</small></td><td>25.02 <small>&plusmn;0.20</small></td></tr>
+              <tr><td>UCD</td><td>NeurIPS 2022</td><td>40.65 <small>&plusmn;0.68</small></td><td>58.54 <small>&plusmn;0.70</small></td><td>51.84 <small>&plusmn;0.72</small></td><td>72.19 <small>&plusmn;0.60</small></td><td>22.64 <small>&plusmn;0.40</small></td><td>26.26 <small>&plusmn;0.45</small></td></tr>
+              <tr><td>ATA</td><td>AIJ 2023</td><td>45.00 <small>&plusmn;0.50</small></td><td>66.22 <small>&plusmn;0.50</small></td><td>53.57 <small>&plusmn;0.50</small></td><td>75.48 <small>&plusmn;0.40</small></td><td>22.10 <small>&plusmn;0.20</small></td><td>24.32 <small>&plusmn;0.40</small></td></tr>
+              <tr><td>LDP-Net</td><td>CVPR 2023</td><td>49.82 <small>&plusmn;0.70</small></td><td>70.39 <small>&plusmn;0.66</small></td><td>53.82 <small>&plusmn;0.71</small></td><td>72.90 <small>&plusmn;0.63</small></td><td>23.01 <small>&plusmn;0.45</small></td><td>26.67 <small>&plusmn;0.40</small></td></tr>
+              <tr><td>StyleAdv</td><td>CVPR 2023</td><td>48.49 <small>&plusmn;0.72</small></td><td>68.72 <small>&plusmn;0.67</small></td><td>58.58 <small>&plusmn;0.83</small></td><td>77.73 <small>&plusmn;0.62</small></td><td>22.64 <small>&plusmn;0.35</small></td><td>26.07 <small>&plusmn;0.37</small></td></tr>
+              <tr><td>FAP</td><td>IJCAI 2024</td><td>50.56 <small>&plusmn;0.73</small></td><td>64.17 <small>&plusmn;0.69</small></td><td>57.34 <small>&plusmn;0.72</small></td><td>72.05 <small>&plusmn;0.60</small></td><td>21.56 <small>&plusmn;0.20</small></td><td>24.15 <small>&plusmn;0.20</small></td></tr>
+              <tr><td>FLoR</td><td>CVPR 2024</td><td>49.99 <small>&plusmn;0.68</small></td><td>70.39 <small>&plusmn;0.67</small></td><td>53.18 <small>&plusmn;0.70</small></td><td>72.31 <small>&plusmn;0.62</small></td><td>23.11 <small>&plusmn;0.45</small></td><td>26.70 <small>&plusmn;0.40</small></td></tr>
+              <tr><td>MEFP</td><td>NeurIPS 2024</td><td>51.55 <small>&plusmn;0.70</small></td><td>73.61 <small>&plusmn;0.66</small></td><td>52.06 <small>&plusmn;0.69</small></td><td>73.78 <small>&plusmn;0.61</small></td><td>22.82 <small>&plusmn;0.45</small></td><td>26.53 <small>&plusmn;0.40</small></td></tr>
+              <tr><td>SVasP</td><td>AAAI 2025</td><td>49.49 <small>&plusmn;0.72</small></td><td>68.95 <small>&plusmn;0.66</small></td><td>59.07 <small>&plusmn;0.81</small></td><td>77.78 <small>&plusmn;0.62</small></td><td>23.23 <small>&plusmn;0.35</small></td><td>26.87 <small>&plusmn;0.38</small></td></tr>
+              <tr><td>Meta DeepBDC+IAM</td><td>TPAMI 2025</td><td>45.80 <small>&plusmn;0.21</small></td><td>77.71 <small>&plusmn;0.15</small></td><td class="na">-</td><td class="na">-</td><td class="na">-</td><td class="na">-</td></tr>
+              <tr><td>STL DeepBDC+IAM</td><td>TPAMI 2025</td><td>55.92 <small>&plusmn;0.20</small></td><td>76.43 <small>&plusmn;0.16</small></td><td class="na">-</td><td class="na">-</td><td class="na">-</td><td class="na">-</td></tr>
+              <tr class="base"><td>DVLA-RL</td><td>ICLR 2026</td><td>67.46 <small>&plusmn;0.47</small></td><td>78.99 <small>&plusmn;0.35</small></td><td>69.26 <small>&plusmn;0.45</small></td><td>80.70 <small>&plusmn;0.36</small></td><td>23.47 <small>&plusmn;0.20</small></td><td>26.94 <small>&plusmn;0.22</small></td></tr>
+              <tr class="ours"><td>DVLA-RL++</td><td>Ours</td><td>69.14 <small>&plusmn;0.45</small></td><td>80.30 <small>&plusmn;0.33</small></td><td>70.87 <small>&plusmn;0.43</small></td><td>81.92 <small>&plusmn;0.34</small></td><td>23.65 <small>&plusmn;0.19</small></td><td>27.10 <small>&plusmn;0.21</small></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Trained on miniImageNet and tested on the novel split of CUB, Places and ChestX. CUB makes the object-to-fine-grained shift explicit, while Places and ChestX probe larger shifts.</p>
+      </div>
+    </div>
+    <div class="finding">
+      <p>DVLA-RL++ achieves the best accuracy in every setting. It exceeds the strongest compared method by 1.54 percentage points on average over the twelve in-domain settings and improves on DVLA-RL by 1.03 points on average across the six cross-domain settings, so purified support evidence transfers across domains with different visual statistics.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 06 analysis -->
+<section id="analysis" class="chapter chapter-tinted">
+  <div class="shell">
+    <div class="section-heading">
+      <span class="section-index" aria-hidden="true">06</span>
+      <h2>Each module improves accuracy, and both together improve <span class="term-pur">robustness</span></h2>
+    </div>
+    <p class="section-lead">Ablations use the 5-way 1-shot setting with matched semantic caches and training budgets, five training seeds and 2,000 evaluation episodes per seed. Each variant reports clean accuracy and the accuracy on matched queries after a context intervention that holds the foreground object and its label fixed while replacing the background or an incidental co-occurring object.</p>
+
+    <div class="chart-card" data-ablation-chart>
+      <div class="chart-controls">
+        <div class="chart-title">Component controls: clean versus context-shifted queries</div>
+        <div class="tabs" style="margin:0" role="tablist" aria-label="Dataset">
+          <button class="tab" role="tab" data-dataset="miniImageNet" aria-selected="true">miniImageNet</button>
+          <button class="tab" role="tab" data-dataset="CUB" aria-selected="false">CUB</button>
+        </div>
+        <div class="chart-legend"><span class="lg-clean">Clean</span><span class="lg-shift">Shift</span></div>
+      </div>
+      <svg class="chart-svg" role="img" aria-label="Grouped bar chart of clean and shifted 5-way 1-shot accuracy for DVLA-RL, purification alone, gating alone and DVLA-RL++"></svg>
+      <p class="table-note">CSP denotes complementary semantic purification and CFG counterfactual gating. Purification alone retains the conference gate, whereas gating alone retains uniform visual support prototypes. Hover a bar for its value.</p>
+    </div>
+
+    <div class="table-scroll" style="max-width:900px;margin:28px auto 0">
+      <table class="results ablation">
+        <thead>
+          <tr><th rowspan="2">Variant</th><th colspan="2" class="group">miniImageNet</th><th colspan="2" class="group">CUB</th></tr>
+          <tr><th>Clean</th><th>Shift</th><th>Clean</th><th>Shift</th></tr>
+        </thead>
+        <tbody>
+          <tr class="base"><td>DVLA-RL</td><td>81.7</td><td>75.8</td><td>91.9</td><td>85.0</td></tr>
+          <tr><td>Uniform allocation</td><td>82.2</td><td>77.6</td><td>92.8</td><td>87.2</td></tr>
+          <tr><td>Positive semantics only</td><td>82.7</td><td>79.0</td><td>93.5</td><td>89.1</td></tr>
+          <tr><td>No neutral option</td><td>83.0</td><td>79.7</td><td>93.8</td><td>90.0</td></tr>
+          <tr><td>Static gate</td><td>82.8</td><td>79.8</td><td>93.6</td><td>90.0</td></tr>
+          <tr><td>Fixed margin</td><td>83.1</td><td>80.1</td><td>94.0</td><td>90.6</td></tr>
+          <tr><td>No intrinsic fallback</td><td>82.9</td><td>79.6</td><td>93.7</td><td>89.8</td></tr>
+          <tr><td>State baseline only</td><td>83.0</td><td>80.4</td><td>94.0</td><td>90.9</td></tr>
+          <tr><td>No nuisance cost</td><td>83.1</td><td>80.1</td><td>94.0</td><td>90.5</td></tr>
+          <tr class="ours"><td>DVLA-RL++</td><td>83.4</td><td>81.2</td><td>94.3</td><td>92.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note" style="max-width:900px;margin-inline:auto">Internal purification and policy controls on 5-way 1-shot accuracy (%). Uniform allocation replaces the selection weights by 1/M, positive-only semantics removes the nuisance bank, the no-neutral control forces the allocation mass to one, and the static control learns a support-independent scalar gate.</p>
+    <div class="finding">
+      <p>Every control reduces shifted accuracy more than clean accuracy, which confirms that signed evidence, neutral allocation, ambiguity-aware rejection and the counterfactual training signal each contribute to robustness against contextual change.</p>
+    </div>
+
+    <figure>
+      <div class="figure-frame">
+        <a class="figure-link" href="static/figures/sensitivity.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution sensitivity figure">
+          <img src="static/figures/sensitivity.png" alt="Parameter sensitivity to the allocation temperature, the visual-anchor coefficient and the nuisance-cost weight." width="1503" height="394" loading="lazy">
+        </a>
+      </div>
+      <figcaption class="figure-caption">Parameter sensitivity to (a) the allocation temperature &tau;<sub>s</sub>, (b) the visual-anchor coefficient &lambda;, and (c) the nuisance-cost weight &gamma;. For &tau;<sub>s</sub> &isin; {0.02, 0.05, 0.1, 0.2, 0.5, 1.0} the miniImageNet accuracies are 79.8, 81.6, 83.1, 83.4, 83.0 and 82.2%. Accuracy stays within 0.3 points of the default for &lambda; in [0.5, 0.9] and within 0.2 points for &gamma; in [0.1, 0.75].</figcaption>
+    </figure>
+
+    <div class="figure-grid">
+      <figure>
+        <div class="figure-frame">
+          <a class="figure-link" href="static/figures/tsne.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution t-SNE figure">
+            <img src="static/figures/tsne.png" alt="t-SNE projections of five classes with 100 points each for the baseline and DVLA-RL++ across four evaluation scenarios." width="988" height="536" loading="lazy">
+          </a>
+        </div>
+        <figcaption class="figure-caption">t-SNE projections of query features on miniImageNet, CIFAR-FS, Stanford Dogs and Places. Baseline features overlap because of contextual variation, whereas DVLA-RL++ features form compact class neighborhoods.</figcaption>
+      </figure>
+      <figure>
+        <div class="figure-frame">
+          <a class="figure-link" href="static/figures/attention.png" target="_blank" rel="noreferrer" aria-label="Open full-resolution attention figure">
+            <img src="static/figures/attention.png" alt="Attention patterns of the baseline, purification alone, counterfactual gating alone and DVLA-RL++ on nine miniImageNet images." width="883" height="491" loading="lazy">
+          </a>
+        </div>
+        <figcaption class="figure-caption">Attention of the baseline, purification alone, gating alone and DVLA-RL++ on nine images covering co-occurrence, occlusion, clutter and camouflage. Purification controls which support evidence enters the prototype, while gating controls how semantics influence successive visual layers.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ citation -->
+<section class="citation shell" id="citation" aria-labelledby="citation-heading">
+  <h2 id="citation-heading">Citation</h2>
+<pre aria-label="BibTeX citation of DVLA-RL++"><code>@article{li2026dvlarlpp,
+  title   = {DVLA-RL++: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning},
+  author  = {Li, Wenhao and Meng, Xianjing and Wang, Qiangchang and Han, Zhongyi and Yin, Yilong and Nie, Liqiang},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  note    = {under review},
+  year    = {2026}
+}</code></pre>
+<pre aria-label="BibTeX citation of DVLA-RL"><code>@inproceedings{li2026dvlarl,
+  title     = {DVLA-RL: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning},
+  author    = {Li, Wenhao and Meng, Xianjing and Wang, Qiangchang and Han, Zhongyi and Wu, Zhibin and Yin, Yilong},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026}
+}</code></pre>
+</section>
+
+<section class="acknowledgments shell" id="acknowledgments">
+  <h2>Acknowledgments</h2>
+  <p>The backbone, episode sampler and pre-training recipe follow <a href="https://github.com/iLearn-Lab/NeurIPS25-VTFSL" target="_blank" rel="noreferrer">VT-FSL</a> and <a href="https://github.com/zhangdoudou123/SemFew" target="_blank" rel="noreferrer">SemFew</a>. We thank their authors for releasing their code.</p>
+</section>
+
+</main>
+<footer class="shell">
+  <span>DVLA-RL++: Dual-Level <span class="term-align">Vision-Language Alignment</span> with <span class="term-gate">Reinforcement Learning Gating</span> for Few-Shot Learning</span>
+  <a href="#top">Back to top &uarr;</a>
+  <a href="https://github.com/peacelwh/TPAMI27-DVLA-RLpp" target="_blank" rel="noreferrer">Code</a>
+  <a href="https://peacelwh.github.io/" target="_blank" rel="noreferrer">Author page</a>
+  <p class="site-credit">This project page's design and presentation are inspired by <a href="https://omni-taskonomy.github.io/" target="_blank" rel="noreferrer">OmniTaskonomy</a>. We thank its authors for the inspiration.</p>
+</footer>
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script defer src="static/main.js"></script>
+</body>
+</html>
