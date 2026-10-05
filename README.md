@@ -15,6 +15,7 @@
   <br/>
   <p>
   <img src="https://img.shields.io/badge/IEEE_TPAMI-Submission-blue.svg?style=flat-square" alt="TPAMI">
+  <a href="https://peacelwh.github.io/TPAMI27-DVLA-RLpp/"><img src="https://img.shields.io/badge/Project_Page-DVLA--RL%2B%2B-2ea44f.svg?style=flat-square" alt="Project Page"></a>
   <a href="https://openreview.net/forum?id=2ix1K6zPRf"><img src="https://img.shields.io/badge/DVLA--RL-ICLR_2026-8A2BE2.svg?style=flat-square" alt="ICLR 2026"></a>
   <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/Platform-PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white"></a>
   <img src="https://img.shields.io/badge/Language-Python-green.svg?style=flat-square" alt="Language">
@@ -26,6 +27,7 @@
 This repository is the official PyTorch implementation of **DVLA-RL++**, the journal extension of our ICLR 2026 paper
 [DVLA-RL: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning](https://openreview.net/forum?id=2ix1K6zPRf).
 The manuscript is under review at *IEEE Transactions on Pattern Analysis and Machine Intelligence*.
+**Project page:** https://peacelwh.github.io/TPAMI27-DVLA-RLpp/
 
 DVLA-RL++ keeps the dual-level semantic alignment of DVLA-RL and adds two components that decide **which support
 evidence enters a class prototype** and **how strongly semantics influence each visual layer**:
