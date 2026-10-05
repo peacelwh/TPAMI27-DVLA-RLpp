@@ -1,0 +1,17 @@
+# Python >= 3.8
+torch>=1.13
+torchvision
+timm>=0.9
+einops
+numpy
+tqdm
+tensorboard
+Pillow
+pyyaml
+pytest
+
+# Optional: semantic bank generation (scripts/generate_semantics.py)
+# transformers>=4.49
+# accelerate
+# qwen-vl-utils
+# git+https://github.com/openai/CLIP.git

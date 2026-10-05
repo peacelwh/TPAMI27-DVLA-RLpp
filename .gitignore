@@ -1,0 +1,25 @@
+# data, caches and checkpoints are never tracked
+data/datasets/*
+data/semantic/*.pth
+data/checkpoint/*.pth
+!data/**/README.md
+results/save/
+results/pretrain/
+results/semantic/
+results/logs/*.txt
+**/tensorboard/
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+
+# os / editors
+.DS_Store
+.idea/
+.vscode/
