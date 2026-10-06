@@ -201,11 +201,9 @@ table.ablation td.mark { font-size: 1.05rem; }
 .figure-grid figure { margin: 0; }
 
 /* citation / acknowledgments / footer */
-.citation { max-width: 780px; padding: 50px 0 30px; }
+.citation { max-width: 780px; padding: 50px 0 56px; }
 .citation h2 { margin: 0 0 18px; font-size: 2rem; }
 .citation pre { color: #40566b; white-space: pre-wrap; overflow-wrap: anywhere; background: #f4f7fa; border: 1px solid #dce5ed; border-radius: 8px; margin: 0 0 16px; padding: 22px 24px; font-size: .95rem; line-height: 1.6; font-family: var(--mono); }
-.acknowledgments { max-width: 780px; padding: 20px 0 48px; }
-.acknowledgments h2 { margin-bottom: 16px; font-size: 2rem; }
 footer { border-top: 1px solid var(--border); color: #8a949e; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 26px; padding: 24px 0 30px; font-size: .78rem; }
 footer a { color: #718295; }
 footer > span { text-align: center; flex-basis: 100%; }
