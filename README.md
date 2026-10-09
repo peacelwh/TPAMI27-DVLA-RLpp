@@ -14,6 +14,7 @@
   <sup>4</sup>Harbin Institute of Technology (Shenzhen)
   <br/>
   <p>
+  <a href="https://arxiv.org/abs/2610.12095"><img src="https://img.shields.io/badge/arXiv-2610.12095-b31b1b.svg?style=flat-square" alt="arXiv"></a>
   <img src="https://img.shields.io/badge/IEEE_TPAMI-Submission-blue.svg?style=flat-square" alt="TPAMI">
   <a href="https://peacelwh.github.io/TPAMI27-DVLA-RLpp/"><img src="https://img.shields.io/badge/Project_Page-DVLA--RL%2B%2B-2ea44f.svg?style=flat-square" alt="Project Page"></a>
   <a href="https://openreview.net/forum?id=2ix1K6zPRf"><img src="https://img.shields.io/badge/DVLA--RL-ICLR_2026-8A2BE2.svg?style=flat-square" alt="ICLR 2026"></a>
@@ -204,8 +205,7 @@ If you find this repository useful, please cite the conference and journal versi
 @article{li2026dvlarlpp,
   title   = {{DVLA-RL++}: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning},
   author  = {Li, Wenhao and Meng, Xianjing and Wang, Qiangchang and Han, Zhongyi and Yin, Yilong and Nie, Liqiang},
-  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  note    = {under review},
+  journal = {arXiv preprint arXiv:2610.12095},
   year    = {2026}
 }
 ```
