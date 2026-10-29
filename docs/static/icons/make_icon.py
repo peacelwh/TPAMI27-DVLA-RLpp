@@ -1,172 +1,214 @@
-"""DVLA-RL++ icon, tied to the method (split-tile template).
+"""DVLA-RL++ mark: a bird assembled from image patches.
 
-left  half  VISION   : a support image as a patch grid. Patches on the bird are kept (bright, blue outline),
-                       background reed patches are faded out  -> complementary semantic purification
-right half  LANGUAGE : dual-level semantics. Short chips = local attribute phrases, long bar = global description.
-                       blue = intrinsic bank, rose = nuisance bank
-centre badge         : the RL gate a_l as a gauge mixing the image-guided (blue) and text-guided (rose) branches
+The bird (the paper's running example) is solid at the head and dissolves into square patches towards the
+wings and tail. Pale patches merge into the bird (retained intrinsic evidence), a few rose patches drift away
+(rejected nuisance evidence). Deep blue tile with a soft glow.
 """
 import math
+import random
 import sys
 
-NAVY = "#26364a"
-BLUE = "#4f86b8"
-BLUE_L = "#8fbbe3"
-ROSE = "#c96f7a"
-ROSE_L = "#eea3ab"
 OUT = sys.argv[1] if len(sys.argv) > 1 else "."
-T0, B0 = 8.0, 120.0
+
+# ------------------------------------------------------------------ geometry (cubic segments)
+BODY = [
+    ("M", (96, 33)),
+    ("C", (90, 29), (84, 30.5), (81, 35)),
+    ("C", (76, 44), (68, 54), (60, 61)),
+    ("L", (24, 79)),
+    ("C", (35, 77), (43, 74.5), (49, 73.5)),
+    ("L", (31, 97)),
+    ("C", (43, 89), (53, 80), (62, 73)),
+    ("C", (72, 66), (84, 58), (90, 50)),
+    ("C", (94, 45.5), (98, 41), (98, 37)),
+    ("C", (98, 35.5), (97.4, 34), (96, 33)),
+]
+HEAD = [
+    ("M", (98.5, 37)),
+    ("C", (98.5, 42), (94.5, 45.5), (89.5, 45.5)),
+    ("C", (84.5, 45.5), (80.5, 41.5), (80.5, 36.5)),
+    ("C", (80.5, 31.5), (84.5, 27.5), (89.5, 27.5)),
+    ("C", (94.5, 27.5), (98.5, 32), (98.5, 37)),
+]
+BEAK = [
+    ("M", (96.5, 32.8)),
+    ("C", (100, 33.6), (104, 35), (108.5, 36.6)),
+    ("C", (104, 37.6), (100, 38.6), (97, 40)),
+]
+NEAR_WING = [
+    ("M", (84, 41)),
+    ("C", (76, 27), (60, 13), (33, 8)),
+    ("C", (49, 17), (59, 30), (64, 48)),
+    ("C", (70, 53.5), (79, 51.5), (86, 43)),
+]
+FAR_WING = [
+    ("M", (76, 52)),
+    ("C", (64, 45), (49, 39), (29, 37)),
+    ("C", (43, 45), (55, 54), (66, 60)),
+    ("C", (71, 58.5), (74.5, 55.5), (76, 52)),
+]
+SHAPES = [FAR_WING, BODY, HEAD, BEAK, NEAR_WING]
 
 
-def edge(y, top, bot):
-    return top + (bot - top) * (y - T0) / (B0 - T0)
+def to_d(shape):
+    out = []
+    for seg in shape:
+        cmd, pts = seg[0], seg[1:]
+        out.append(cmd + " ".join(f"{x:g} {y:g}" for x, y in pts))
+    return " ".join(out) + " Z"
 
 
-def poly_left(lt, lb):
-    return f"0,0 {edge(0, lt, lb):.2f},0 {edge(128, lt, lb):.2f},128 0,128"
+def sample(shape, n=48):
+    poly, cur = [], None
+    for seg in shape:
+        cmd, pts = seg[0], seg[1:]
+        if cmd == "M":
+            cur = pts[0]; poly.append(cur)
+        elif cmd == "L":
+            cur = pts[0]; poly.append(cur)
+        else:
+            p0, (p1, p2, p3) = cur, pts
+            for i in range(1, n + 1):
+                t = i / n; u = 1 - t
+                x = u ** 3 * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t ** 3 * p3[0]
+                y = u ** 3 * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t ** 3 * p3[1]
+                poly.append((x, y))
+            cur = p3
+    return poly
 
 
-def poly_right(rt, rb):
-    return f"{edge(0, rt, rb):.2f},0 128,0 128,128 {edge(128, rt, rb):.2f},128"
+POLYS = [sample(s) for s in SHAPES]
 
 
-# ------------------------------------------------------------------ bird (colour, cartoon outline)
-def bird(k=1.0):
-    a = f'stroke="{NAVY}" stroke-width="{2.0 * k}" stroke-linejoin="round" stroke-linecap="round"'
-    return "\n".join([
-        f'<path d="M54 57 L29 69 L33 76 L57 64 Z" fill="#8b5a31" {a}/>',
-        f'<path d="M64 62 L62.5 71 M71 61 L71 69" fill="none" {a}/>',
-        f'<ellipse cx="68" cy="52" rx="19.5" ry="13" transform="rotate(-20 68 52)" fill="#b8763f" {a}/>',
-        '<ellipse cx="75" cy="56" rx="11" ry="6.2" transform="rotate(-22 75 56)" fill="#f4dcb6"/>',
-        f'<circle cx="84" cy="38" r="10.5" fill="#b8763f" {a}/>',
-        '<path d="M75.5 33.5 Q83 25.5 92 31.5 Q84 30 76.5 36 Z" fill="#734626"/>',
-        f'<path d="M55 49 Q68 38 83 46 Q77 60 59 60 Q53 56 55 49 Z" fill="#8b5a31" {a}/>',
-        '<path d="M61 50 Q67 47 73 49 M60 54.5 Q67 51.5 76 53.5 M63 58 Q69 56 75 57" fill="none" stroke="#f4dcb6" stroke-width="1.6" stroke-linecap="round"/>',
-        f'<path d="M93.5 35.5 L103.5 38.8 L93.2 42 Z" fill="#eaa53a" {a}/>',
-        '<circle cx="86.6" cy="36.2" r="2.2" fill="#1b1f24"/><circle cx="87.3" cy="35.4" r="0.75" fill="#fff"/>',
-    ])
+def inside(x, y):
+    for poly in POLYS:
+        c = False
+        n = len(poly)
+        for i in range(n):
+            x1, y1 = poly[i]; x2, y2 = poly[(i + 1) % n]
+            if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1 + 1e-12) + x1:
+                c = not c
+        if c:
+            return True
+    return False
 
 
-def vision_panel(small):
-    """Support image as a patch grid: the 3x2 block covering the bird is kept, context patches are faded."""
-    s = ['<rect x="-10" y="-10" width="150" height="150" fill="url(#img)"/>']
-    for x, top in ((14, 16), (24, 26), (56, 12)):
-        s.append(f'<path d="M{x} 124 Q{x + 2} 70 {x - 1} {top}" fill="none" stroke="#c4a666" stroke-width="{2.4 if not small else 3.2}" stroke-linecap="round"/>')
-    if not small:
-        s.append('<ellipse cx="24" cy="22" rx="3.8" ry="8.5" fill="#e3c88f" stroke="#b89a5c" stroke-width="1.2"/>')
-        s.append('<ellipse cx="56" cy="18" rx="3.6" ry="8" fill="#e3c88f" stroke="#b89a5c" stroke-width="1.2"/>')
-    s.append('<g transform="translate(36.4 48.5) scale(0.74) translate(-66 -52)">')
-    s.append(f'<path d="M-40 92 Q60 76 150 56" fill="none" stroke="#8a7a3c" stroke-width="{3.8 if not small else 5.0}" stroke-linecap="round"/>')
-    s.append(bird(1.0 if not small else 1.45))
-    s.append('</g>')
-    cell, x0, y0 = 20.0, 8.0, 8.0
-    keep = {(0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)}
-    for i in range(-1, 6):
-        for j in range(-1, 7):
-            if (i, j) in keep:
+# ------------------------------------------------------------------ dissolve
+# progress along the dissolve axis: 0 = solid (upper right), 1 = fully dissolved (lower left)
+AX0, AX1 = (80.0, 46.0), (26.0, 66.0)
+
+
+def progress(x, y):
+    vx, vy = AX1[0] - AX0[0], AX1[1] - AX0[1]
+    t = ((x - AX0[0]) * vx + (y - AX0[1]) * vy) / (vx * vx + vy * vy)
+    return max(0.0, min(1.0, t))
+
+
+T_SOLID = 0.30   # where the solid bird ends along the dissolve axis
+
+
+def coverage(cx, cy, cell):
+    q = cell * 0.3
+    pts = [(cx, cy), (cx - q, cy - q), (cx + q, cy - q), (cx - q, cy + q), (cx + q, cy + q)]
+    return sum(inside(x, y) for x, y in pts)
+
+
+def patches(cell, seed=11, small=False):
+    rnd = random.Random(seed)
+    kept, rejected = [], []
+    vx, vy = AX1[0] - AX0[0], AX1[1] - AX0[1]
+    L = math.hypot(vx, vy); ux, uy = vx / L, vy / L
+    n = int(130 // cell) + 2
+    for gx in range(-1, n):
+        for gy in range(-1, n):
+            cx, cy = (gx + 0.5) * cell, (gy + 0.5) * cell
+            t = progress(cx, cy)
+            if t < T_SOLID or coverage(cx, cy, cell) < 2:
                 continue
-            s.append(f'<rect x="{x0 + i * cell}" y="{y0 + j * cell}" width="{cell}" height="{cell}" fill="#ffffff" opacity="0.58"/>')
-    gw = 1.1 if not small else 1.7
-    for i in range(-1, 7):
-        p = x0 + i * cell
-        s.append(f'<path d="M{p} -10 V140 M-10 {p} H140" stroke="#ffffff" stroke-width="{gw}"/>')
-    kx, ky = x0 + 0 * cell, y0 + 1 * cell
-    s.append(f'<rect x="{kx + 1.5}" y="{ky + 1.5}" width="{3 * cell - 3}" height="{2 * cell - 3}" rx="4" fill="none" '
-             f'stroke="{BLUE}" stroke-width="{2.6 if not small else 3.6}"/>')
-    return "\n    ".join(s)
-
-
-def language_panel(small, rt, rb):
-    s = ['<rect x="-10" y="-10" width="150" height="150" fill="url(#txt)"/>']
-    h = 8.0 if not small else 12.0
-    if not small:
-        rows = [  # y, [(width, colour)]   local intrinsic, local nuisance, global intrinsic
-            (20, [(22, BLUE), (14, BLUE)]),
-            (33, [(16, BLUE), (22, BLUE)]),
-            (49, [(19, ROSE), (13, ROSE)]),
-            (65, [(46, BLUE)]),
-            (104, [(34, ROSE)]),
-        ]
-    else:
-        rows = [
-            (18, [(26, BLUE)]),
-            (36, [(20, BLUE), (14, BLUE)]),
-            (56, [(26, ROSE)]),
-        ]
-    for y, chips in rows:
-        x = edge(y + h, rt, rb) + (6 if not small else 7)
-        if y > 90:
-            x = max(x, 84)
-        for w, c in chips:
-            s.append(f'<rect x="{x:.1f}" y="{y}" width="{w}" height="{h}" rx="{h / 2}" fill="{c}"/>')
-            x += w + (4 if not small else 5)
-    return "\n    ".join(s)
-
-
-def gauge(cx, cy, r, k=1.0):
-    """RL gate: needle mixes the image-guided (blue) and text-guided (rose) arcs."""
-    R = r * 0.58
-    gx, gy = cx, cy + r * 0.2
-
-    def pt(deg, rad=R):
-        t = math.radians(deg)
-        return gx + rad * math.cos(t), gy - rad * math.sin(t)
-
-    def arc(a0, a1, col):
-        (x0, y0), (x1, y1) = pt(a0), pt(a1)
-        return (f'<path d="M{x0:.2f} {y0:.2f} A{R:.2f} {R:.2f} 0 0 1 {x1:.2f} {y1:.2f}" fill="none" '
-                f'stroke="{col}" stroke-width="{r * 0.2:.2f}" stroke-linecap="round"/>')
-
-    nx, ny = pt(122, R * 0.92)
-    return "\n  ".join([
-        f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r}" fill="{NAVY}" stroke="#ffffff" stroke-width="{3.5 * k}"/>',
-        arc(180, 98, BLUE_L),
-        arc(82, 0, ROSE_L),
-        f'<path d="M{gx:.2f} {gy:.2f} L{nx:.2f} {ny:.2f}" stroke="#ffffff" stroke-width="{r * 0.15:.2f}" stroke-linecap="round"/>',
-        f'<circle cx="{gx:.2f}" cy="{gy:.2f}" r="{r * 0.16:.2f}" fill="#ffffff"/>',
-    ])
-
-
-def build(shadow=False, inset=8.0, rx=24.0, small=False):
-    k = 1.45 if small else 1.0
-    lt, lb, rt, rb = (70.0, 52.0, 77.0, 59.0)
-    tile = f'x="{inset}" y="{inset}" width="{128 - 2 * inset}" height="{128 - 2 * inset}" rx="{rx}"'
-    lp, rp = poly_left(lt, lb), poly_right(rt, rb)
+            d = max(0.0, (t - T_SOLID) / (1 - T_SOLID))
+            if d > 0.25 and rnd.random() < 0.22 * d:
+                continue
+            size = cell * (0.90 - 0.42 * d ** 1.2)
+            drift = 6.5 * d ** 1.8 * (0.5 + rnd.random())
+            op = 1.0 - 0.55 * d ** 1.5
+            kept.append((cx + ux * drift, cy + uy * drift, size, op))
+    # rejected nuisance patches leave the tail along the drift direction
+    rose = [((20, 70), 1.0, 0.9), ((16, 85), 0.8, 0.65), ((28, 95), 0.9, 0.75), ((22, 104), 0.65, 0.5)]
     if small:
-        bx, by, br = 97.0, 96.0, 23.0
-    else:
-        by = 92.0
-        bx = (edge(by, lt, lb) + edge(by, rt, rb)) / 2
-        br = 18.0
-    out = [
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">',
-        '  <title>DVLA-RL++</title>',
-        '  <defs>',
-        f'    <clipPath id="tile"><rect {tile}/></clipPath>',
-        f'    <clipPath id="left"><polygon points="{lp}"/></clipPath>',
-        f'    <clipPath id="right"><polygon points="{rp}"/></clipPath>',
-        '    <linearGradient id="img" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6e7f6"/><stop offset="1" stop-color="#efe6d2"/></linearGradient>',
-        '    <linearGradient id="txt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdfaf5"/><stop offset="1" stop-color="#f6efe6"/></linearGradient>',
-        '  </defs>',
-    ]
-    if shadow:
-        out.append(f'  <rect x="{inset + 2.5}" y="{inset + 4}" width="{128 - 2 * inset}" height="{128 - 2 * inset}" rx="{rx}" fill="{NAVY}" opacity="0.16"/>')
-    out += [
-        f'  <rect {tile} fill="#ffffff"/>',
-        '  <g clip-path="url(#tile)">',
-        f'   <g clip-path="url(#left)">\n    {vision_panel(small)}\n   </g>',
-        f'   <g clip-path="url(#right)">\n    {language_panel(small, rt, rb)}\n   </g>',
-        f'   <polygon points="{lp}" fill="none" stroke="{NAVY}" stroke-width="{2 * k}"/>',
-        f'   <polygon points="{rp}" fill="none" stroke="{NAVY}" stroke-width="{2 * k}"/>',
-        '  </g>',
-        f'  {gauge(bx, by, br, k)}',
-        f'  <rect {tile} fill="none" stroke="{NAVY}" stroke-width="{4 * k}"/>',
-        '</svg>',
-    ]
-    return "\n".join(out) + "\n"
+        rose = [((12, 70), 1.25, 0.9), ((16, 92), 1.1, 0.75)]
+    for (x, y), k, op in rose:
+        rejected.append((x, y, cell * k, op))
+    return kept, rejected
 
 
-open(f"{OUT}/logo.svg", "w").write(build(shadow=True))
-open(f"{OUT}/icon.svg", "w").write(build(inset=4.0, rx=26.0))
-open(f"{OUT}/favicon.svg", "w").write(build(inset=3.0, rx=28.0, small=True))
-print("wrote logo.svg, icon.svg, favicon.svg to", OUT)
+def rects(items, fill, rx):
+    return "\n    ".join(
+        f'<rect x="{x - s / 2:.2f}" y="{y - s / 2:.2f}" width="{s:.2f}" height="{s:.2f}" rx="{rx}" '
+        f'fill="{fill}" opacity="{op:.2f}"/>' for x, y, s, op in items)
+
+
+def build(inset=4.0, rx=28.0, small=False):
+    cell = 4.6 if not small else 7.0
+    vx, vy = AX1[0] - AX0[0], AX1[1] - AX0[1]
+    L = math.hypot(vx, vy); ux, uy = vx / L, vy / L; nx, ny = -uy, ux
+    T_HALF = T_SOLID - 0.12
+    qx, qy = AX0[0] + T_HALF * vx, AX0[1] + T_HALF * vy
+    step = []
+    for gx in range(-1, int(130 // cell) + 2):
+        for gy in range(-1, int(130 // cell) + 2):
+            cx, cy = (gx + 0.5) * cell, (gy + 0.5) * cell
+            if T_HALF - 0.02 <= progress(cx, cy) < T_SOLID:
+                step.append(f'<rect x="{gx * cell - 0.4:.2f}" y="{gy * cell - 0.4:.2f}" width="{cell + 0.8:.2f}" height="{cell + 0.8:.2f}"/>')
+    step_cells = "".join(step)
+    pts = [(qx + nx * 300, qy + ny * 300), (qx + nx * 300 - ux * 300, qy + ny * 300 - uy * 300),
+           (qx - nx * 300 - ux * 300, qy - ny * 300 - uy * 300), (qx - nx * 300, qy - ny * 300)]
+    solid_poly = " ".join(f"{x:.2f},{y:.2f}" for x, y in pts)
+    kept, rejected = patches(cell, small=small)
+    bird_paths = "\n      ".join(f'<path d="{to_d(s)}"/>' for s in SHAPES)
+    w = 128 - 2 * inset
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>DVLA-RL++</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4a86c4"/>
+      <stop offset="0.5" stop-color="#2a4f82"/>
+      <stop offset="1" stop-color="#16233b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.66" cy="0.32" r="0.55">
+      <stop offset="0" stop-color="#a9d2f5" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#9cc8ef" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wingfill" gradientUnits="userSpaceOnUse" x1="84" y1="40" x2="52" y2="26">
+      <stop offset="0" stop-color="#f4f9ff"/>
+      <stop offset="1" stop-color="#c3dbf2"/>
+    </linearGradient>
+    <linearGradient id="birdfill" gradientUnits="userSpaceOnUse" x1="100" y1="26" x2="40" y2="90">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#cfe2f5"/>
+    </linearGradient>
+    <clipPath id="solid"><polygon points="{solid_poly}"/>{step_cells}</clipPath>
+    <clipPath id="tile"><rect x="{inset}" y="{inset}" width="{w}" height="{w}" rx="{rx}"/></clipPath>
+  </defs>
+  <rect x="{inset}" y="{inset}" width="{w}" height="{w}" rx="{rx}" fill="url(#bg)"/>
+  <g clip-path="url(#tile)">
+    <rect width="128" height="128" fill="url(#glow)"/>
+    <g transform="translate(64 66) scale(0.95) translate(-68 -53)">
+    {rects(rejected, "#f2a7b3", 1.2)}
+    {rects(kept, "url(#birdfill)", 1.0)}
+    <g fill="url(#birdfill)" clip-path="url(#solid)">
+      {bird_paths}
+      <path d="{to_d(NEAR_WING)}" fill="url(#wingfill)"/>
+    </g>
+    <circle cx="91.6" cy="34.6" r="{2.1 if not small else 2.8}" fill="#1f3555"/>
+    <circle cx="92.3" cy="33.9" r="{0.7 if not small else 0.9}" fill="#ffffff"/>
+    </g>
+  </g>
+  <rect x="{inset + 0.75}" y="{inset + 0.75}" width="{w - 1.5}" height="{w - 1.5}" rx="{rx - 0.75}" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1.5"/>
+</svg>
+'''
+
+
+open(f"{OUT}/logo.svg", "w").write(build())
+open(f"{OUT}/favicon.svg", "w").write(build(inset=2.0, rx=30.0, small=True))
+open(f"{OUT}/touch.svg", "w").write(build(inset=0.0, rx=0.01))
+print("wrote", OUT)
