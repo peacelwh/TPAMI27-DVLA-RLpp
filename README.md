@@ -1,6 +1,6 @@
 <a id="top"></a>
 <div align="center">
-  <h1 align="center">DVLA-RL++: Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning</h1>
+  <h1 align="center"><img src="docs/static/icons/logo-512.png" alt="DVLA-RL++ logo" width="64" align="absmiddle">&nbsp;DVLA-RL++:<br>Dual-Level Vision-Language Alignment with Reinforcement Learning Gating for Few-Shot Learning</h1>
   Wenhao&#160;Li<sup>1, 2</sup>,
   Xianjing&#160;Meng<sup>3</sup>,
   Qiangchang&#160;Wang<sup>1</sup>,

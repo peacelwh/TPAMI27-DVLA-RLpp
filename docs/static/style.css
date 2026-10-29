@@ -51,6 +51,8 @@ sup { line-height: 0; }
 /* ---------------------------------------------------------------- header */
 .paper-header { text-align: center; padding: 68px 0 34px; }
 .paper-header h1 .title-second { font-weight: 500; display: block; margin-top: 6px; }
+.paper-header h1 .title-main { display: inline-flex; align-items: center; gap: .3em; }
+.title-logo { width: auto; height: 1.3em; flex-shrink: 0; filter: drop-shadow(0 6px 14px rgba(26, 40, 64, .22)); }
 .term-align { color: var(--term-align); font-weight: 700; }
 .term-gate { color: var(--term-gate); font-weight: 700; }
 .term-pur { color: var(--term-pur); font-weight: 700; }
